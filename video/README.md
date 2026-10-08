@@ -2,7 +2,9 @@
 
 Video vertical para Reels / TikTok / Shorts que invita a completar el formulario para diseñar un viaje a medida.
 
-**Archivo final:** `newtrips-disena-tu-viaje.mp4` — 1080×1920, 16 s, 60 fps, H.264 + AAC.
+**Archivos finales** (1080×1920, 16 s, 60 fps, H.264 + AAC):
+- `newtrips-disena-tu-viaje-voz.mp4` — con voz en off.
+- `newtrips-disena-tu-viaje.mp4` — solo música y efectos.
 
 ## Storyboard (120 BPM · 1 compás = 2 s)
 
@@ -33,4 +35,5 @@ ffmpeg -framerate 60 -i renders/frames/%05d.png -i audio/audio.wav \
 Requiere Node con `playwright` instalado globalmente, Chromium y ffmpeg.
 
 - **Textos:** se cambian en `scenes.js`. Por ejemplo, el llamado final está en la escena S7.
+- **Voz en off:** `python3 audio/mix_voice.py` recorta `audio/voz-original.m4a`, ubica cada frase en su momento (tabla `SEGMENTS`) y baja la música cuando hay voz. Si grabás de nuevo, reemplazá el archivo y ajustá los tiempos de la tabla.
 - **Efectos de sonido:** los tiempos están en `audio/cues.json`.
