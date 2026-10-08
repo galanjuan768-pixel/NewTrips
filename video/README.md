@@ -35,5 +35,5 @@ ffmpeg -framerate 60 -i renders/frames/%05d.png -i audio/audio.wav \
 Requiere Node con `playwright` instalado globalmente, Chromium y ffmpeg.
 
 - **Textos:** se cambian en `scenes.js`. Por ejemplo, el llamado final está en la escena S7.
-- **Voz en off:** `python3 audio/mix_voice.py` recorta `audio/voz-original.m4a`, ubica cada frase en su momento (tabla `SEGMENTS`) y baja la música cuando hay voz. Si grabás de nuevo, reemplazá el archivo y ajustá los tiempos de la tabla.
+- **Voz en off:** `python3 audio/mix_voice.py` recorta las tomas `audio/voz-toma*.m4a`, ubica cada frase en su momento (tabla `SEGMENTS`) y baja la música cuando hay voz. Cada fila de la tabla indica de qué toma sale la frase. Si grabás de nuevo, agregá el archivo a `VOICES` y ajustá los tiempos.
 - **Efectos de sonido:** los tiempos están en `audio/cues.json`.
