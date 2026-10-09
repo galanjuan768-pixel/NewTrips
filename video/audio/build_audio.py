@@ -1,13 +1,16 @@
 """Banda sonora del reel: base a 120 BPM (Fa mayor, F-C-Dm-Bb) + efectos sintetizados
 alineados con cada golpe visual de audio/cues.json. Genera assets/audio.wav (48 kHz, -14 LUFS).
-Uso (desde video/):  python3 audio/build_audio.py
+Uso (desde video/):  python3 audio/build_audio.py [cues.json] [salida.wav]
 """
 import json
 import subprocess
+import sys
 import numpy as np
 
 SR = 48000
-cfg = json.load(open("audio/cues.json"))
+CUES = sys.argv[1] if len(sys.argv) > 1 else "audio/cues.json"
+OUT = sys.argv[2] if len(sys.argv) > 2 else "audio/audio.wav"
+cfg = json.load(open(CUES))
 BPM, DUR = cfg["bpm"], cfg["duration"]
 N = int(SR * DUR)
 beat = 60 / BPM
@@ -192,5 +195,5 @@ mix[:, -fade:] *= np.linspace(1, 0, fade)
 mix /= max(1e-9, np.abs(mix).max()) / 0.89
 pcm = (np.clip(mix.T, -1, 1) * 32767).astype("<i2").tobytes()
 subprocess.run(["ffmpeg", "-v", "error", "-y", "-f", "s16le", "-ar", str(SR), "-ac", "2", "-i", "-",
-                "-af", "loudnorm=I=-14:TP=-1.5:LRA=7", "-ar", str(SR), "audio/audio.wav"], input=pcm, check=True)
-print("listo: audio/audio.wav")
+                "-af", "loudnorm=I=-14:TP=-1.5:LRA=7", "-ar", str(SR), OUT], input=pcm, check=True)
+print("listo:", OUT)

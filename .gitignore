@@ -5,3 +5,5 @@ video/renders/
 video/snapshots/
 video/audio/voz-montada.wav
 video/audio/mezcla.wav
+video/*/renders/
+video/*/snapshots/
