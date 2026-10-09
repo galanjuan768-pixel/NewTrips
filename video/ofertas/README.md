@@ -1,6 +1,6 @@
 # Anuncio "Caribe y Brasil" (Meta Ads)
 
-Video vertical 1080×1920, 31,2 s, 60 fps, para Reels/Stories en Meta Ads: `newtrips-caribe-brasil-ads.mp4`.
+Video vertical 1080×1920, 26 s (120 BPM), 60 fps, para Reels/Stories en Meta Ads: `newtrips-caribe-brasil-ads.mp4`.
 
 ## Datos
 
@@ -29,6 +29,7 @@ Las cuotas, según el sitio, son para la parte terrestre (se aclara en letra chi
 ## Pensado para Meta
 
 - Gancho y precio en los primeros 2 segundos; se entiende sin sonido.
+- Velocidad: `SPEED` en `scenes.js` (1,2 = 26 s; 1 = 31,2 s). Si se cambia, escalar también los tiempos de `cues.json`.
 - Todo el texto importante entre y=270 e y=1250, fuera de las zonas que tapan la interfaz y el botón del anuncio.
 - Cierre con "Link acá abajo" y una flecha hacia el botón de llamada a la acción.
 

@@ -1,4 +1,4 @@
-/* New Trips · "Caribe y Brasil" — anuncio para Meta Ads, 1080×1920, 31,2 s, 100 BPM.
+/* New Trips · "Caribe y Brasil" — anuncio para Meta Ads, 1080×1920, 26 s, 120 BPM (tiempos escritos a 100 BPM y escalados con SPEED).
    Cada cuadro se dibuja desde cero a partir de t (renderAt): sin transiciones CSS,
    sin timers y sin azar sin semilla, para poder renderizar cualquier cuadro en cualquier orden. */
 (function () {
@@ -344,7 +344,10 @@
 
   // ---------- fondo global y API de render ----------
   const bgAt = (t) => (t < 13.2 ? C.ink : t < 14.4 ? C.red : t < 23.4 ? C.ink : t < 25.8 ? C.cream : t < 28.2 ? C.red : C.cream);
-  window.renderAt = function (t) {
+  // los tiempos de arriba están escritos a 100 BPM; SPEED los comprime (1,2 → 120 BPM, 26 s)
+  const SPEED = 1.2;
+  window.renderAt = function (tReal) {
+    const t = tReal * SPEED;
     bg.style.background = bgAt(t);
     for (const s of scenes) {
       const on = t >= s.start && t < s.end;
@@ -362,5 +365,5 @@
     window.renderAt(0);
     return true;
   };
-  window.__duration = 31.2;
+  window.__duration = 31.2 / SPEED;
 })();
