@@ -12,7 +12,6 @@
   const bg = document.getElementById('bg');
   const fx = document.getElementById('fx');
   const PHOTO = (n) => '../../assets/photos/' + n + '.png';
-  const IMG = (n) => 'img/' + n + '.png'; // fotos del Caribe generadas con Higgsfield
   const LOGO = (n) => '../../assets/' + n + '.png';
 
   // ---------- utilidades ----------
@@ -94,6 +93,84 @@
     const flash = h('div', { cls: 'layer', style: { background: '#fff', opacity: 0 } }, card);
     return { card, img, flash };
   }
+  // ---------- ilustraciones del Caribe (SVG animado; reemplazan a las fotos mientras no estén) ----------
+  const SAND = '#F3E2BF', LEAF = '#17704A', LEAF2 = '#0F5536', TRUNK = '#8A5A33';
+  function palm(x, y, hgt, lean, scale) {
+    // tronco curvo + copa de hojas; (x, y) es la base
+    const tx = x + lean * hgt, ty = y - hgt;
+    let g = `<g transform="translate(0,0)"><path d="M${x - 14 * scale} ${y} Q ${x + lean * hgt * 0.2} ${y - hgt * 0.6} ${tx} ${ty} L ${tx + 12 * scale} ${ty + 6} Q ${x + lean * hgt * 0.2 + 22 * scale} ${y - hgt * 0.6} ${x + 14 * scale} ${y} Z" fill="${TRUNK}"/>`;
+    for (let k = 0; k < 8; k++) {
+      const a = -170 + k * 25 + (k % 2) * 6, L = (150 + (k % 3) * 30) * scale;
+      g += `<path transform="translate(${tx} ${ty}) rotate(${a})" d="M0 0 Q ${L * 0.5} ${-34 * scale} ${L} ${18 * scale} Q ${L * 0.5} ${4 * scale} 0 0 Z" fill="${k % 2 ? LEAF : LEAF2}"/>`;
+    }
+    g += `<circle cx="${tx}" cy="${ty + 4}" r="${12 * scale}" fill="${TRUNK}"/></g>`;
+    return g;
+  }
+  function art(parent, kind) {
+    const card = h('div', { cls: 'layer', style: { overflow: 'hidden', background: '#0B6E8E' } }, parent);
+    const img = h('div', { cls: 'layer', style: { transformOrigin: '50% 50%' } }, card);
+    const sunset = kind === 'hamaca', aerial = kind === 'catamaran';
+    const HZ = sunset ? 1060 : 900, SH = 1480; // horizonte y orilla
+    let defs = `<linearGradient id="sky_${kind}" x1="0" y1="0" x2="0" y2="1">${sunset
+      ? '<stop offset="0" stop-color="#FF6A3D"/><stop offset=".55" stop-color="#FFB547"/><stop offset="1" stop-color="#FFE3A3"/>'
+      : '<stop offset="0" stop-color="#3FA9E8"/><stop offset=".7" stop-color="#9AD8F5"/><stop offset="1" stop-color="#D9F2FB"/>'}</linearGradient>
+      <linearGradient id="sea_${kind}" x1="0" y1="0" x2="0" y2="1">${sunset
+      ? '<stop offset="0" stop-color="#1D5E7A"/><stop offset=".6" stop-color="#1A8C95"/><stop offset="1" stop-color="#3CC4BF"/>'
+      : '<stop offset="0" stop-color="#0B4F8A"/><stop offset=".45" stop-color="#0A93B8"/><stop offset="1" stop-color="#3FE0D0"/>'}</linearGradient>`;
+    let body;
+    if (aerial) {
+      defs += `<radialGradient id="bar_${kind}" cx=".35" cy=".62" r=".5"><stop offset="0" stop-color="#F7EBCB"/><stop offset=".35" stop-color="#9FF0E1"/><stop offset="1" stop-color="#1FB8C9" stop-opacity="0"/></radialGradient>`;
+      body = `<rect width="${W}" height="${H}" fill="#0E8FB5"/><rect width="${W}" height="${H}" fill="url(#bar_${kind})"/>
+        <g data-waves></g>
+        <g data-boat><path d="M-70 -150 Q -60 -175 -40 -150 L -40 150 Q -55 170 -70 150 Z M40 -150 Q 55 -175 70 -150 L 70 150 Q 55 170 40 150 Z" fill="#fff"/>
+        <rect x="-60" y="-90" width="120" height="170" rx="10" fill="#F5F5F0"/><rect x="-44" y="-40" width="88" height="70" rx="8" fill="#DCE7EA"/>
+        <path d="M-50 -120 L 0 -240 L 50 -120 Z" fill="#fff" opacity=".9"/></g>`;
+    } else {
+      body = `<rect width="${W}" height="${HZ}" fill="url(#sky_${kind})"/>
+        <circle cx="${sunset ? 540 : 800}" cy="${sunset ? HZ - 40 : 330}" r="${sunset ? 190 : 120}" fill="${sunset ? '#FFE07A' : '#FFF4C2'}"/>
+        <rect y="${HZ}" width="${W}" height="${SH - HZ + 40}" fill="url(#sea_${kind})"/>
+        ${sunset ? `<rect x="470" y="${HZ}" width="140" height="${SH - HZ}" fill="#FFD27A" opacity=".35"/>` : ''}
+        <g data-waves></g>
+        <path data-shore fill="${SAND}"/><path data-foam fill="none" stroke="#fff" stroke-width="10" stroke-linecap="round" opacity=".9"/>`;
+      if (kind === 'punta-cana') {
+        body += palm(120, 1760, 760, 0.42, 1.25) + palm(-40, 1900, 900, 0.5, 1.4);
+        body += [620, 860].map((x) => `<g transform="translate(${x} 1640)"><rect x="-80" y="0" width="160" height="22" rx="10" fill="#fff"/><path d="M-80 0 L -130 -60 L -110 -66 L -60 0 Z" fill="#fff"/><rect x="-70" y="22" width="8" height="40" fill="#ccc"/><rect x="62" y="22" width="8" height="40" fill="#ccc"/></g>`).join('');
+      } else if (kind === 'cancun') {
+        body += [[260, 1700, 1.2], [700, 1620, 0.95], [980, 1760, 1.3]].map(([x, y, k]) => `<g transform="translate(${x} ${y}) scale(${k})"><rect x="-7" y="-210" width="14" height="230" fill="#7A4E2A"/><path d="M-170 -150 Q 0 -300 170 -150 Q 0 -190 -170 -150 Z" fill="#C9974F"/><path d="M-170 -150 Q 0 -190 170 -150 L 150 -130 Q 0 -165 -150 -130 Z" fill="#A87635"/></g>`).join('');
+        body += palm(1040, 1500, 640, -0.35, 1.0);
+      } else if (kind === 'hamaca') {
+        body += palm(150, 1840, 900, 0.18, 1.3) + palm(960, 1860, 860, -0.16, 1.3);
+        body += `<path d="M300 1080 Q 560 1400 830 1110" fill="none" stroke="#E9D2A6" stroke-width="22" stroke-linecap="round"/><path d="M300 1080 Q 560 1440 830 1110" fill="none" stroke="#D8B77E" stroke-width="10" opacity=".8"/>`;
+      }
+    }
+    img.innerHTML = `<svg xmlns="${NS}" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" style="display:block"><defs>${defs}</defs>${body}</svg>`;
+    const waves = img.querySelector('[data-waves]'), shore = img.querySelector('[data-shore]'), foam = img.querySelector('[data-foam]'), boat = img.querySelector('[data-boat]');
+    h('div', { cls: 'layer', style: { background: 'linear-gradient(180deg, rgba(26,20,16,.45) 0%, rgba(26,20,16,0) 28%, rgba(26,20,16,0) 60%, rgba(26,20,16,.45) 100%)' } }, card);
+    const flash = h('div', { cls: 'layer', style: { background: '#fff', opacity: 0 } }, card);
+    const tick = (t) => {
+      // olas: líneas blancas que se desplazan; orilla y espuma que respiran
+      let d = '';
+      const rows = aerial ? 14 : 7;
+      for (let r = 0; r < rows; r++) {
+        const y0 = aerial ? 80 + r * 135 : HZ + 40 + r * ((SH - HZ - 60) / rows), amp = aerial ? 10 : 4 + r * 2;
+        for (let s = 0; s < 4; s++) {
+          const x0 = ((hash(r * 7 + s) * W + t * (aerial ? 30 : 40 + r * 8)) % (W + 300)) - 150, len = 90 + hash(r + s * 3) * 160;
+          d += `M${x0.toFixed(1)} ${y0.toFixed(1)} q ${len / 2} ${(-amp * (1 + Math.sin(t * 3 + r))).toFixed(1)} ${len} 0 `;
+        }
+      }
+      waves.innerHTML = `<path d="${d}" fill="none" stroke="#fff" stroke-width="${aerial ? 5 : 4}" stroke-linecap="round" opacity=".45"/>`;
+      if (shore) {
+        const pts = [];
+        for (let x = 0; x <= W; x += 40) pts.push([x, SH + Math.sin(x / 120 + t * 2.2) * 14 + Math.sin(x / 47 - t * 1.3) * 6]);
+        const line = pts.map(([x, y], i) => (i ? 'L' : 'M') + x + ' ' + y.toFixed(1)).join(' ');
+        shore.setAttribute('d', line + ` L ${W} ${H} L 0 ${H} Z`);
+        foam.setAttribute('d', pts.map(([x, y], i) => (i ? 'L' : 'M') + x + ' ' + (y - 6 - 8 * (0.5 + 0.5 * Math.sin(t * 2.2 + x / 90))).toFixed(1)).join(' '));
+      }
+      if (boat) boat.setAttribute('transform', `translate(${700 + Math.sin(t * 0.6) * 20} ${560 - t * 30}) rotate(-12) scale(.8)`);
+    };
+    tick(0);
+    return { card, img, flash, tick };
+  }
   function wipe(parent, color) {
     return h('div', { cls: 'abs', style: { borderRadius: '50%', background: color, width: '0', height: '0' } }, parent);
   }
@@ -147,11 +224,11 @@
   // ======================================================================
   const s2 = scene(2, 4);
   const halves = [
-    { src: IMG('catamaran'), pos: '50% 45%', word: '¿CARIBE', lab: 'CARIBE · AÉREO' },
+    { art: 'catamaran', word: '¿CARIBE', lab: 'CARIBE · AÉREO' },
     { src: PHOTO('camboriu'), pos: '28% 50%', word: 'O BRASIL?', lab: 'BRASIL · BUS' },
   ].map((d, i) => {
     const box = h('div', { cls: 'abs', style: { left: '0', top: i * 960 + 'px', width: W + 'px', height: '960px', overflow: 'hidden' } }, s2.el);
-    const ph = photo(box, d.src, d.pos, i ? 'linear-gradient(180deg, rgba(26,20,16,0) 40%, rgba(26,20,16,.65) 100%)' : 'linear-gradient(180deg, rgba(26,20,16,.45) 0%, rgba(26,20,16,0) 35%, rgba(26,20,16,0) 50%, rgba(26,20,16,.55) 100%)');
+    const ph = d.art ? art(box, d.art) : photo(box, d.src, d.pos, i ? 'linear-gradient(180deg, rgba(26,20,16,0) 40%, rgba(26,20,16,.65) 100%)' : 'linear-gradient(180deg, rgba(26,20,16,.45) 0%, rgba(26,20,16,0) 35%, rgba(26,20,16,0) 50%, rgba(26,20,16,.55) 100%)');
     const word = h('div', { cls: 'disp abs', text: d.word, style: { left: '60px', color: C.cream, textShadow: SHADOW, transformOrigin: '50% 50%' } }, box);
     const lab = h('div', { cls: 'mono abs', text: d.lab, style: { left: '64px', top: i ? '60px' : '250px', fontSize: '24px', color: C.cream, textShadow: '0 2px 10px rgba(0,0,0,.5)' } }, box);
     return { box, ph, word, lab };
@@ -175,6 +252,7 @@
       tf(hv.box, { x: (i ? 1 : -1) * lerp(1080, 0, e) });
       mb(hv.box, lerp(50, 0, E.outExpo(prog(lt, a, a + 0.2))), 0);
       tf(hv.ph.img, { s: lerp(1.25, 1.06, E.outExpo(prog(lt, a, a + 1))) + lt * 0.02 });
+      if (hv.ph.tick) hv.ph.tick(lt + 2);
       const wa = 0.5 + i * 0.5, ew = E.outExpo(prog(lt, wa, wa + 0.25));
       tf(hv.word, { y: lerp(i ? 200 : -200, 0, ew), s: lerp(1.4, 1, ew), o: prog(lt, wa, wa + 0.04) });
       mb(hv.word, 0, lerp(30, 0, ew));
@@ -190,10 +268,10 @@
   // ======================================================================
   const s3 = scene(4, 7);
   const S3P = [
-    { src: IMG('punta-cana'), pos: '50% 50%', lab: 'PUNTA CANA · REP. DOMINICANA' },
-    { src: IMG('cancun'), pos: '50% 50%', lab: 'CANCÚN · MÉXICO' },
-    { src: IMG('hamaca'), pos: '50% 50%', lab: 'VOS ELEGÍS EL DESTINO' },
-  ].map((d) => ({ ...photo(s3.el, d.src, d.pos), lab: d.lab }));
+    { art: 'punta-cana', lab: 'PUNTA CANA · REP. DOMINICANA' },
+    { art: 'cancun', lab: 'CANCÚN · MÉXICO' },
+    { art: 'hamaca', lab: 'VOS ELEGÍS EL DESTINO' },
+  ].map((d) => ({ ...art(s3.el, d.art), lab: d.lab }));
   const lab3 = h('div', { cls: 'mono abs', text: '', style: { left: '64px', top: '250px', fontSize: '26px', color: C.cream, textShadow: '0 2px 10px rgba(0,0,0,.5)' } }, s3.el);
   const tit3 = h('div', { cls: 'disp abs', text: 'CARIBE', style: { left: '60px', top: '300px', color: C.cream, textShadow: SHADOW, transformOrigin: '50% 50%' } }, s3.el);
   const PLANE_SM = svg('<path d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5z" fill="currentColor"/>', '0 0 24 24', 44, 44);
@@ -213,6 +291,7 @@
     const i = Math.min(2, Math.floor(lt)), u = lt - i;
     S3P.forEach((p, j) => (p.card.style.display = j === i ? 'block' : 'none'));
     const p = S3P[i];
+    p.tick(t);
     tf(p.img, { s: lerp(1.3, 1.08, E.outExpo(prog(u, 0, 0.5))) - u * 0.03, x: (i % 2 ? 1 : -1) * lerp(90, 0, E.outExpo(prog(u, 0, 0.3))) });
     mb(p.img, lerp(24, 0, E.outExpo(prog(u, 0, 0.14))), 0);
     p.flash.style.opacity = lerp(0.6, 0, prog(u, 0, 0.12)).toFixed(3);
