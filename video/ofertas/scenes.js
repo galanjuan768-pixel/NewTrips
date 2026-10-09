@@ -159,7 +159,7 @@
     const s = scene(start, start + list.length * CARD_DUR);
     const items = list.map((d, i) => {
       const bgL = h('div', { cls: 'layer', style: { overflow: 'hidden' } }, s.el);
-      h('img', { cls: 'cover', src: IMG(d.img), style: { objectPosition: d.pos, transform: 'scale(1.25)', filter: 'blur(26px) brightness(.62) saturate(1.2)' } }, bgL);
+      h('img', { cls: 'cover', src: IMG(d.img + '-fondo') }, bgL); // fondo ya desenfocado (ffmpeg) para que el render sea rápido
       const sec = h('div', { cls: 'mono abs', text: section, style: { left: '0', width: W + 'px', textAlign: 'center', top: '196px', fontSize: '26px', color: C.cream, opacity: 0.9 } }, bgL);
       const card = h('div', {
         cls: 'abs',
