@@ -1,0 +1,196 @@
+{
+  "bpm": 120,
+  "duration": 21.0,
+  "groove": [
+    [
+      0,
+      13,
+      "light"
+    ],
+    [
+      13,
+      18,
+      "full"
+    ],
+    [
+      18,
+      20.5,
+      "light"
+    ],
+    [
+      20.5,
+      21,
+      "pad"
+    ]
+  ],
+  "hits": [
+    {
+      "t": 0,
+      "sfx": "whoosh",
+      "gain": 0.45,
+      "len": 0.3,
+      "pan": -0.3
+    },
+    {
+      "t": 0.4,
+      "sfx": "whoosh",
+      "gain": 0.45,
+      "len": 0.3,
+      "pan": -0.3
+    },
+    {
+      "t": 1.0,
+      "sfx": "whoosh",
+      "gain": 0.45,
+      "len": 0.3,
+      "pan": -0.3
+    },
+    {
+      "t": 1.4,
+      "sfx": "whoosh",
+      "gain": 0.45,
+      "len": 0.3,
+      "pan": -0.3
+    },
+    {
+      "t": 2.5,
+      "sfx": "whoosh",
+      "gain": 0.7,
+      "len": 0.45
+    },
+    {
+      "t": 3.2,
+      "sfx": "pop",
+      "gain": 0.6,
+      "pitch": 1.3
+    },
+    {
+      "t": 4.4,
+      "sfx": "pop",
+      "gain": 0.6,
+      "pitch": 1.3
+    },
+    {
+      "t": 5.9,
+      "sfx": "pop",
+      "gain": 0.6,
+      "pitch": 1.6
+    },
+    {
+      "t": 7.0,
+      "sfx": "pop",
+      "gain": 0.6,
+      "pitch": 1.3
+    },
+    {
+      "t": 8.6,
+      "sfx": "pop",
+      "gain": 0.6,
+      "pitch": 1.3
+    },
+    {
+      "t": 10.1,
+      "sfx": "pop",
+      "gain": 0.6,
+      "pitch": 1.3
+    },
+    {
+      "t": 11.6,
+      "sfx": "pop",
+      "gain": 0.6,
+      "pitch": 1.6
+    },
+    {
+      "t": 13.0,
+      "sfx": "impact",
+      "gain": 0.7
+    },
+    {
+      "t": 13.5,
+      "sfx": "whoosh",
+      "gain": 0.5,
+      "len": 0.3
+    },
+    {
+      "t": 14.0,
+      "sfx": "pop",
+      "gain": 0.6,
+      "pitch": 1.0
+    },
+    {
+      "t": 14.5,
+      "sfx": "pop",
+      "gain": 0.6,
+      "pitch": 1.12
+    },
+    {
+      "t": 15.0,
+      "sfx": "pop",
+      "gain": 0.6,
+      "pitch": 1.24
+    },
+    {
+      "t": 16.0,
+      "sfx": "impact",
+      "gain": 0.7
+    },
+    {
+      "t": 16.2,
+      "sfx": "pop",
+      "gain": 0.4,
+      "pitch": 1.4
+    },
+    {
+      "t": 16.28,
+      "sfx": "pop",
+      "gain": 0.4,
+      "pitch": 1.5
+    },
+    {
+      "t": 16.36,
+      "sfx": "pop",
+      "gain": 0.4,
+      "pitch": 1.5999999999999999
+    },
+    {
+      "t": 16.44,
+      "sfx": "pop",
+      "gain": 0.4,
+      "pitch": 1.7
+    },
+    {
+      "t": 16.52,
+      "sfx": "pop",
+      "gain": 0.4,
+      "pitch": 1.7999999999999998
+    },
+    {
+      "t": 16.6,
+      "sfx": "whoosh",
+      "gain": 0.5,
+      "len": 0.4
+    },
+    {
+      "t": 18.0,
+      "sfx": "impact",
+      "gain": 1.0
+    },
+    {
+      "t": 18.0,
+      "sfx": "sparkle",
+      "gain": 0.7
+    },
+    {
+      "t": 18.5,
+      "sfx": "pop",
+      "gain": 1.0,
+      "pitch": 0.8
+    },
+    {
+      "t": 18.9,
+      "sfx": "pop",
+      "gain": 0.7,
+      "pitch": 1.2
+    }
+  ]
+}
