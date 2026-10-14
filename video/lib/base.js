@@ -3,7 +3,12 @@
    Uso: <script src="../lib/base.js"></script> y luego const { h, tf, ... } = NTV; */
 window.NTV = (function () {
   const W = 1080, H = 1920, BEAT = 0.5;
-  const C = {
+  // window.NT_PALETTE = 'rojo-blanco' (antes de cargar este archivo) deja solo los colores de Newtrips: rojo y blanco.
+  const RB = window.NT_PALETTE === 'rojo-blanco';
+  const C = RB ? {
+    red: '#ED1C24', redDark: '#C9141B', cream: '#FFFFFF', creamWarm: '#FFFFFF',
+    ink: '#ED1C24', inkSoft: '#ED1C24', yellow: '#FFFFFF', line: 'rgba(237,28,36,.22)',
+  } : {
     red: '#ED1C24', redDark: '#B8131A', cream: '#FAF6EE', creamWarm: '#F2EBDA',
     ink: '#1A1410', inkSoft: '#4A3F37', yellow: '#FFD23F', line: 'rgba(26,20,16,.12)',
   };
@@ -72,8 +77,8 @@ window.NTV = (function () {
   }
   const svg = (inner, vb, w, hgt) => `<svg xmlns="${NS}" viewBox="${vb}" width="${w}" height="${hgt}" style="display:block">${inner}</svg>`;
   const CHECK = (stroke) => svg(`<path d="M6 12.5l4 4 8-9" fill="none" stroke="${stroke}" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>`, '0 0 24 24', '100%', '100%');
-  const PLANE = svg('<path d="M46 24 L31 19.5 L22 5 L16.5 5 L21 19.5 L10 20.5 L6 14.5 L2.5 14.5 L4.5 24 L2.5 33.5 L6 33.5 L10 27.5 L21 28.5 L16.5 43 L22 43 L31 28.5 Z" fill="#FFD23F" stroke="#1A1410" stroke-width="1.5" stroke-linejoin="round"/>', '0 0 48 48', 96, 96);
-  const POINTER = svg('<path d="M3 2 L3 19 L7.5 14.8 L10.5 21.5 L13.6 20.1 L10.6 13.5 L16.8 13.5 Z" fill="#1A1410" stroke="#fff" stroke-width="1.4" stroke-linejoin="round"/>', '0 0 24 24', 84, 84);
+  const PLANE = svg(`<path d="M46 24 L31 19.5 L22 5 L16.5 5 L21 19.5 L10 20.5 L6 14.5 L2.5 14.5 L4.5 24 L2.5 33.5 L6 33.5 L10 27.5 L21 28.5 L16.5 43 L22 43 L31 28.5 Z" fill="${RB ? '#FFFFFF' : '#FFD23F'}" stroke="${RB ? '#ED1C24' : '#1A1410'}" stroke-width="${RB ? 2.5 : 1.5}" stroke-linejoin="round"/>`, '0 0 48 48', 96, 96);
+  const POINTER = svg(`<path d="M3 2 L3 19 L7.5 14.8 L10.5 21.5 L13.6 20.1 L10.6 13.5 L16.8 13.5 Z" fill="${C.ink}" stroke="#fff" stroke-width="1.4" stroke-linejoin="round"/>`, '0 0 24 24', 84, 84);
   const ARROW = (c) => svg(`<path d="M4 12h15M13 5.5l6.5 6.5-6.5 6.5" fill="none" stroke="${c}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>`, '0 0 24 24', 64, 64);
 
   const scenes = [];
@@ -130,7 +135,10 @@ window.NTV = (function () {
     const SHC = { x: 540, y: 470 };
     const rings = Array.from({ length: Math.ceil(dur / BEAT) }, () => h('div', { cls: 'abs', style: { left: SHC.x - 170 + 'px', top: SHC.y - 170 + 'px', width: '340px', height: '340px', borderRadius: '50%', border: `6px solid ${C.red}`, boxSizing: 'border-box' } }, s.el));
     const shield = h('img', { cls: 'abs', src: LOGO('logo'), style: { left: SHC.x - 170 + 'px', top: SHC.y - 170 + 'px', width: '340px', height: '340px', transformOrigin: '50% 50%' } }, s.el);
-    const wm = h('img', { cls: 'abs', src: LOGO('logo-wordmark-black'), style: { left: '220px', top: '690px', width: '640px' } }, s.el);
+    // en rojo y blanco el wordmark (PNG negro) se pinta de rojo con una máscara
+    const wm = RB
+      ? h('div', { cls: 'abs', style: { left: '220px', top: '690px', width: '640px', height: (640 * 182 / 1359).toFixed(1) + 'px', background: C.red, WebkitMaskImage: `url(${LOGO('logo-wordmark-black')})`, WebkitMaskSize: '100% 100%' } }, s.el)
+      : h('img', { cls: 'abs', src: LOGO('logo-wordmark-black'), style: { left: '220px', top: '690px', width: '640px' } }, s.el);
     const btn = h('div', { cls: 'abs', style: { left: '70px', top: '840px', width: '940px', height: '150px', borderRadius: '75px', background: C.red, display: 'flex', alignItems: 'center', justifyContent: 'center', transformOrigin: '50% 50%', boxShadow: '0 20px 44px rgba(237,28,36,.32)' } }, s.el);
     const btnTxt = h('span', { text: cta, style: { fontFamily: 'Bricolage Grotesque', fontWeight: 800, fontStretch: '75%', fontSize: '84px', color: C.cream, whiteSpace: 'nowrap', letterSpacing: '-.01em' } }, btn);
     const link = h('div', { cls: 'abs', text: 'LINK ACÁ ABAJO', style: { left: '0', width: W + 'px', textAlign: 'center', top: '1030px', fontFamily: 'Bricolage Grotesque', fontWeight: 800, fontSize: '64px', letterSpacing: '-.01em', color: C.ink } }, s.el);
@@ -181,7 +189,7 @@ window.NTV = (function () {
 
   const EG_IMG = (n) => '../egresados/img/' + n + '.jpg'; // fotos de newtrips.vercel.app/egresados.html
   return {
-    W, H, C, NS, root, bg, fx, BEAT, clamp, lerp, prog, E, hash, kick, h, tf, mb, fit, svg, CHECK, PLANE, POINTER, ARROW, DOWN,
+    RB, W, H, C, NS, root, bg, fx, BEAT, clamp, lerp, prog, E, hash, kick, h, tf, mb, fit, svg, CHECK, PLANE, POINTER, ARROW, DOWN,
     scenes, scene, photo, wipe, setWipe, SHADOW, SAFE_TOP, SAFE_BOTTOM, STAR, confetti, renderConfetti, LOGO, EG_IMG, endCard, finish,
   };
 })();
